@@ -101,7 +101,7 @@
     channel.bind('App\\Events\\OrderCreated', function(data) {
       console.log(data.order[0]);
       let audio = document.getElementById('notifySound');
-      const playTimes = 2;  
+      const playTimes = 5;  
       let playCount = 1;    
 
       audio.onended = null;
@@ -112,7 +112,7 @@
           setTimeout(function() {
             audio.currentTime = 0;
             audio.play();
-          }, 2000);
+          }, 300);
         }
       };
 
