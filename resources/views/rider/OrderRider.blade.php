@@ -17,7 +17,7 @@
                         <table id="myTable" class="display table-responsive">
                             <thead>
                                 <tr>
-                                    <th class="text-left">ชื่อไรเดอร์</th>
+                                    <th class="text-left">ชื่อลูกค้า</th>
                                     <th class="text-center">เบอร์ติดต่อ</th>
                                     <th class="text-left">รายละเอียด</th>
                                     <th class="text-center">ดูสถานที่จัดส่ง</th>
