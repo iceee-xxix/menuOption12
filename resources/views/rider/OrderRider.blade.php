@@ -45,6 +45,7 @@
                 url: language,
             },
             processing: true,
+            scrollX: true,
             ajax: {
                 url: "{{route('OrderRiderlistData')}}",
                 type: "post",
