@@ -14,7 +14,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <table id="myTable" class="display" style="width:100%">
+                        <table id="myTable" class="display table-responsive">
                             <thead>
                                 <tr>
                                     <th class="text-left">ชื่อไรเดอร์</th>
