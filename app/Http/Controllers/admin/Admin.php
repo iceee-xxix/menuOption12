@@ -18,6 +18,7 @@ use App\Models\User;
 use BaconQrCode\Encoder\QrCode;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use PromptPayQR\Builder;
 
@@ -95,13 +96,14 @@ class Admin extends Controller
                 }
                 $flag_order = '<button class="btn btn-sm btn-success">สั่งหน้าร้าน</button>';
                 $action = '<button data-id="' . $rs->table_id . '" type="button" class="btn btn-sm btn-outline-primary modalShow m-1">รายละเอียด</button>' . $pay;
+                $created_at = Carbon::parse($rs->created_at)->addHours(7);
                 $info[] = [
                     'flag_order' => $flag_order,
                     'table_id' => $rs->table_id,
                     'total' => $rs->total,
                     'remark' => $rs->remark,
                     'status' => $status,
-                    'created' => $this->DateThai($rs->created_at),
+                    'created' => $this->DateThai($created_at),
                     'action' => $action
                 ];
             }
@@ -249,10 +251,16 @@ class Admin extends Controller
 
     function DateThai($strDate)
     {
-        $strYear = date("Y", strtotime($strDate)) + 543;
-        $strMonth = date("n", strtotime($strDate));
-        $strDay = date("j", strtotime($strDate));
-        $time = date("H:i", strtotime($strDate));
+        // รับ $strDate ที่อาจเป็น Carbon หรือ string
+        if ($strDate instanceof Carbon) {
+            $date = $strDate;
+        } else {
+            $date = Carbon::parse($strDate);
+        }
+        $strYear = $date->year + 543;
+        $strMonth = $date->month;
+        $strDay = $date->day;
+        $time = $date->format('H:i');
         $strMonthCut = array("", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม");
         $strMonthThai = $strMonthCut[$strMonth];
         return "$strDay $strMonthThai $strYear" . " " . $time;
@@ -340,11 +348,12 @@ class Admin extends Controller
                 $action = '<a href="' . route('printReceipt', $rs->id) . '" target="_blank" type="button" class="btn btn-sm btn-outline-primary m-1">ออกใบเสร็จฉบับย่อ</a>
                 <button data-id="' . $rs->id . '" type="button" class="btn btn-sm btn-outline-primary modalTax m-1">ออกใบกำกับภาษี</button>
                 <button data-id="' . $rs->id . '" type="button" class="btn btn-sm btn-outline-primary modalShowPay m-1">รายละเอียด</button>';
+                $created_at = Carbon::parse($rs->created_at)->addHours(7);
                 $info[] = [
                     'payment_number' => $rs->payment_number,
                     'table_id' => $rs->table_id,
                     'total' => $rs->total,
-                    'created' => $this->DateThai($rs->created_at),
+                    'created' => $this->DateThai($created_at),
                     'action' => $action
                 ];
             }
@@ -372,11 +381,12 @@ class Admin extends Controller
                 $action = '<a href="' . route('printReceipt', $rs->id) . '" target="_blank" type="button" class="btn btn-sm btn-outline-primary m-1">ออกใบเสร็จฉบับย่อ</a>
                 <button data-id="' . $rs->id . '" type="button" class="btn btn-sm btn-outline-primary modalTax m-1">ออกใบกำกับภาษี</button>
                 <button data-id="' . $rs->id . '" type="button" class="btn btn-sm btn-outline-primary modalShowPay m-1">รายละเอียด</button>';
+                $created_at = Carbon::parse($rs->created_at)->addHours(7);
                 $info[] = [
                     'payment_number' => $rs->payment_number,
                     'table_id' => $rs->table_id,
                     'total' => $rs->total,
-                    'created' => $this->DateThai($rs->created_at),
+                    'created' => $this->DateThai($created_at),
                     'action' => $action
                 ];
             }
@@ -451,6 +461,10 @@ class Admin extends Controller
         $order = OrdersDetails::whereIn('order_id', $order_id)
             ->with('menu', 'option.option')
             ->get();
+        // ปรับเวลาสำหรับ pay->created_at
+        if ($pay) {
+            $pay->created_at = Carbon::parse($pay->created_at)->addHours(7);
+        }
         return view('tax', compact('config', 'pay', 'order'));
     }
 
@@ -468,6 +482,10 @@ class Admin extends Controller
         $order = OrdersDetails::whereIn('order_id', $order_id)
             ->with('menu', 'option.option')
             ->get();
+        // ปรับเวลาสำหรับ pay->created_at
+        if ($pay) {
+            $pay->created_at = Carbon::parse($pay->created_at)->addHours(7);
+        }
         return view('taxfull', compact('config', 'pay', 'order', 'get'));
     }
 
@@ -515,13 +533,14 @@ class Admin extends Controller
                 }
                 $flag_order = '<button class="btn btn-sm btn-warning">สั่งออนไลน์</button>';
                 $action = '<button data-id="' . $rs->id . '" type="button" class="btn btn-sm btn-outline-primary modalShow m-1">รายละเอียด</button>' . $pay;
+                $created_at = Carbon::parse($rs->created_at)->addHours(7);
                 $info[] = [
                     'flag_order' => $flag_order,
                     'name' => $rs->name,
                     'total' => $rs->total,
                     'remark' => $rs->remark,
                     'status' => $status,
-                    'created' => $this->DateThai($rs->created_at),
+                    'created' => $this->DateThai($created_at),
                     'action' => $action
                 ];
             }
