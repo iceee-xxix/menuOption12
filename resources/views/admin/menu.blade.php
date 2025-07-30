@@ -27,12 +27,12 @@ $config = Config::first();
             </a>
         </li>
         @if(Session::get('user')->is_rider == 0)
-        <li class="menu-item {{ ($function_key == 'order') ? 'active' : '' }}">
+        <!-- <li class="menu-item {{ ($function_key == 'order') ? 'active' : '' }}">
             <a href="{{route('adminorder')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-store"></i>
                 <div data-i18n="Analytics">ออเดอร์หน้าร้าน</div>
             </a>
-        </li>
+        </li> -->
         <li class="menu-item {{ ($function_key == 'order_rider') ? 'active' : '' }}">
             <a href="{{route('order_rider')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-cart"></i>
